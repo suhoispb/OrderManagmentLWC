@@ -1,0 +1,14 @@
+<template>
+      <div class="slds-var-p-around_small">
+        <h4 class="slds-var-p-around_xx-small slds-var-m-top_x-small slds-truncate slds-text-title_caps bold-text">{product.Name}</h4>
+        <div class="desc">Description: {product.Description__c}</div>
+        <div class="footerButtons">
+            <button class="slds-button slds-button_neutral" onclick={setDetails}>
+                Details
+            </button>
+            <button class="slds-button slds-button_neutral" onclick={setDetails}>
+                Add to cart
+            </button>
+        </div>
+      </div>
+</template>

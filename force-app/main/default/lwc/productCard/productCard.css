@@ -1,0 +1,16 @@
+.bold-text {
+    font-weight: bold;
+  }
+
+.footerButtons {
+  display: flex;
+}
+
+.link{
+  width: 2rem;
+}
+
+.slds-var-p-around_small {
+  width: 19rem;
+}
+

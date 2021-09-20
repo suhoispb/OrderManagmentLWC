@@ -1,0 +1,21 @@
+<template>
+  <lightning-card>
+    <c-search oncchange={updateKey}></c-search>
+      <div class="slds-grid slds-wrap slds-is-relative">
+          <div class="spinner">
+            <template if:true={isLoading}>
+              <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+         </div>
+          <template if:true={products} for:each={products} for:item="product">
+            <div key={product.Id}
+               class="product__c">
+              <c-product-card
+                onselect={handleSelect}
+                product={product}>
+              </c-product-card>
+            </div>
+          </template>
+      </div>
+  </lightning-card>
+</template>
