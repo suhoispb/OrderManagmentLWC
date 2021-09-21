@@ -1,0 +1,12 @@
+<template>
+    <lightning-button
+                        class="slds-m-horizontal--small"
+                        variant="brand"
+                        label="Cart"
+                        disabled={isProductCartEmpty}
+                        onclick={openCart}>
+    </lightning-button>
+    <c-product-cart show-product-cart={showProductCart}>
+
+    </c-product-cart>
+</template>

@@ -9,9 +9,7 @@ import getListOfProductsById from "@salesforce/apex/ProductController.getListOfP
 export default class DetailsOfProduct extends LightningElement {
   
   id = '';
-
   @track product;
-
   subscription = null;
 
   @wire(MessageContext)
@@ -24,7 +22,6 @@ export default class DetailsOfProduct extends LightningElement {
       OrderMessageChannel,
       (message) => this.handleMessage(message)
     );
-    console.log('subsc:', this.subscription)
   };
 
   handleMessage({ productId }) {
@@ -52,4 +49,5 @@ export default class DetailsOfProduct extends LightningElement {
     this.product = undefined;
     console.log('close Modal pls')
   }
+  
 }

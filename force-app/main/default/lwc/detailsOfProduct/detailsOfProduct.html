@@ -42,7 +42,9 @@
           <p>{product.Description__c}</p>
           <p>{product.Type__c}</p>
           <p>{product.Family__c}</p>
-          <p>{product.Image__c}</p>
+          <div style="height: 260px" class="slds-align--absolute-center">
+            <img src={product.Image__c} alt="img" style="width:100%; height: auto; max-height: 260px;">
+          </div>
           <p>{product.Price__c}</p>
         </div>
         <!-- modal footer start-->
@@ -56,9 +58,9 @@
           ></lightning-button>
           <lightning-button
             variant="brand"
-            label="Cancel"
-            title="Cancel"
-            onclick={closeModal}
+            label="Add"
+            title="Add"
+            onclick={AddToCart}
             class="slds-m-right_large"
           ></lightning-button>
         </footer>

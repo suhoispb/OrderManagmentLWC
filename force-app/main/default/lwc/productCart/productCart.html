@@ -1,0 +1,51 @@
+<template>
+    <div if:true={showProductCart}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" 
+                 aria-modal="true" aria-describedby="modal-content-id-2" 
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick={closeProductCart}>
+                        <lightning-icon icon-name="utility:close"
+                                        alternative-text="close"
+                                        variant="inverse"
+                                        size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Product Cart</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    <div style="height: 300px;">
+                        <lightning-datatable
+                            key-field="productId"
+                            hide-checkbox-column="true"
+                            data={productCart}
+                            columns={columns}
+                            onrowaction={handleRowAction}>
+                        </lightning-datatable>
+                    </div>
+                    <p class="slds-float_right slds-text-heading_label">
+                        Total Price: 
+                        <lightning-formatted-number 
+                            value={totalPrice}
+                            format-style="currency"
+                            currency-code="GBR"
+                            class="slds-m-horizontal_small">
+                        </lightning-formatted-number>
+                    </p>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        class="slds-m-top_small"
+                        label="Cancel"
+                        onclick={closeProductCart}>
+                    </lightning-button>
+                </footer>
+            </div>
+         </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</template>

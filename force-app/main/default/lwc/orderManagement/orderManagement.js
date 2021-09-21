@@ -46,6 +46,7 @@ export default class OrderManagement extends LightningElement {
       publish(this.messageContext, OrderMessageChannel, {
         productId: event.detail
       });
+      
       console.log('id2:', event.detail)
     }
     
