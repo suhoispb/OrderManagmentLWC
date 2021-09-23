@@ -6,7 +6,8 @@
                         disabled={isProductCartEmpty}
                         onclick={openCart}>
     </lightning-button>
-    <c-product-cart show-product-cart={showProductCart}>
-
+    <c-product-cart show-product-cart={showProductCart}
+                    onclosecart={closeCart}>
     </c-product-cart>
+    
 </template>

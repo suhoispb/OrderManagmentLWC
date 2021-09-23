@@ -1,6 +1,15 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
+
+
+
+import { publish, MessageContext } from "lightning/messageService";
+import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
 
 export default class ProductCard extends LightningElement {
+
+    @wire(MessageContext)
+    messageContext;
+
     @api product = {
         Name: "",
         Id: "",
@@ -17,5 +26,20 @@ export default class ProductCard extends LightningElement {
         this.dispatchEvent(e);
         console.log('id1:', this.product.Id)
   }
+
+  addProductToCart() {
+      let productObj = {
+        Name: this.product.Name,
+        Id: this.product.Id,
+        Price__c: this.product.Price__c
+      };
+      publish(this.messageContext, OrderMessageChannel, {
+        objRecord: productObj
+      });
+  }
+
+    //   let objRecord = {apiName: "Product__c", productObj};
+    //   console.log('objRecordfromClickAddToCart:',objRecord);
+     
 }
     

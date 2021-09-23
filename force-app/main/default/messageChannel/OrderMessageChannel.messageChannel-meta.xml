@@ -14,5 +14,10 @@
     <description>Product Type</description>
     <fieldName>type</fieldName>
   </lightningMessageFields>
+  <lightningMessageFields>
+    <description>Product Record</description>
+    <fieldName>objRecord</fieldName>
+  </lightningMessageFields>
   <masterLabel>OrderMessageChannel</masterLabel>
 </LightningMessageChannel>
+objRecordInput

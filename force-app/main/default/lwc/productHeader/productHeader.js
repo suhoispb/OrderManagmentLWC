@@ -7,4 +7,7 @@ export default class ProductHeader extends LightningElement {
     openCart() {
        this.showProductCart = true;
     }
+    closeCart() {
+        this.showProductCart = false;
+    }
 }
