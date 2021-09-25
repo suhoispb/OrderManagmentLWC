@@ -3,19 +3,16 @@ import { LightningElement, api, wire, track } from 'lwc';
 import { subscribe, MessageContext } from "lightning/messageService";
 import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
 
+import createOrder from "@salesforce/apex/OrderController.createOrder";
 
-const actions = [
-    { label: 'Delete', name: 'delete' }
-];
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import{ CurrentPageReference } from 'lightning/navigation';
+
 
 const columns = [
     { label: 'Name', fieldName: 'name', wrapText: true },
     { label: 'Price', fieldName: 'price', type: 'currency' },
-    { label: 'Quantity', fieldName: 'quantity', type: 'number' },
-    {
-        type: 'action',
-        typeAttributes: { rowActions: actions },
-    }
+    { label: 'Quantity', fieldName: 'quantity', type: 'number' }
 ];
 
 export default class ProductHeader extends LightningElement {    
@@ -29,13 +26,23 @@ export default class ProductHeader extends LightningElement {
     @track columns = columns; 
     @track productCart = [];
     
+    @api recordId;
+    
+    @wire(CurrentPageReference)
+    pageRef;
+
+    get recordIdFromState(){
+        return this.pageRef.state.c__recordId; 
+    }
+
+    renderedCallback() {
+        if (!this.recordId && this.recordIdFromState) {
+            this.recordId = this.recordIdFromState;
+        }
+    }
 
     closeProductCart() {
         this.dispatchEvent(new CustomEvent("closecart"));
-    }
-
-    handleRowAction(event) {
-        console.log('handle row action:', event.detail.row.Id)
     }
 
     get totalPrice() {
@@ -63,7 +70,6 @@ export default class ProductHeader extends LightningElement {
 
     addProductToCart(objRecord) {        
         let elemIndex = this.productCart.findIndex(elem => {
-            console.log(elem.productId);
             return elem.productId == objRecord.Id
         });
 
@@ -82,5 +88,36 @@ export default class ProductHeader extends LightningElement {
             price     : product.Price__c
         }
         return orderItem;
+    }
+
+    handleCheckoutClick() {
+        let order = {
+            accountId : this.recordId,
+            orderItems : this.productCart
+        }
+        console.log('order:', order)
+
+        let orderJSON = JSON.stringify(order);
+        
+        createOrder({orderJSON: orderJSON})
+            .then(result => {
+                const evt = new ShowToastEvent({
+                    title: "Order created",
+                    message: "Order Id: " + result,
+                    variant: "success"
+                });
+                this.dispatchEvent(evt);
+                
+                this.productCart = [];
+                this.showProductCart = false;
+            })
+            .catch(error => {
+                const evt = new ShowToastEvent({
+                    title: "Error",
+                    message: "Message: " + error.body.message,
+                    variant: "error"
+                });
+                this.dispatchEvent(evt);
+            });
     }
 }

@@ -4,7 +4,7 @@ import getListOfProductsByName from "@salesforce/apex/ProductController.getListO
 import getListOfProductsByType from "@salesforce/apex/ProductController.getListOfProductsByType";
 import getListOfProductsByFamily from "@salesforce/apex/ProductController.getListOfProductsByFamily";
 
-import { publish, subscribe, MessageContext } from "lightning/messageService";
+import { subscribe, MessageContext } from "lightning/messageService";
 import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
 
 
@@ -40,14 +40,6 @@ export default class OrderManagement extends LightningElement {
       this.family = family;
       this.type = type;
       console.log('productFamily:', this.family)
-    }
-  
-    handleSelect(event) {
-      publish(this.messageContext, OrderMessageChannel, {
-        productId: event.detail
-      });
-      
-      console.log('id2:', event.detail)
     }
     
     connectedCallback() {
