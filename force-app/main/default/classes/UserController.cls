@@ -5,4 +5,10 @@ public with sharing class UserController {
         usersList=[ SELECT isManager__c FROM User ];
         return usersList;
     }
+    @AuraEnabled(cacheable=true)
+    public static List<Account> getListOfAccounts() {
+        List<Account> accList=new List<Account>();
+        accList = [ SELECT Name, AccountNumber FROM Account ];
+        return accList;
+    }
 }

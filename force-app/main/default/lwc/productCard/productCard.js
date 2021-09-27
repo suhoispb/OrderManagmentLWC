@@ -7,6 +7,8 @@ export default class ProductCard extends LightningElement {
 
     @wire(MessageContext)
     messageContext;
+    
+    idProductForDetails = '';
 
     @api product = {
         Name: "",
@@ -18,7 +20,6 @@ export default class ProductCard extends LightningElement {
         Price__c: "",
     };
     
-    idProductForDetails = '';
 
     setDetails() {
         this.idProductForDetails =  this.product.Id;
@@ -34,6 +35,5 @@ export default class ProductCard extends LightningElement {
         objRecord: productObj
       });
   }
-     
 }
     

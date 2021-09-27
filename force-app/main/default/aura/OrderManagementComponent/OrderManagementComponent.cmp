@@ -1,0 +1,11 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable,lightning:isUrlAddressable,force:hasRecordId,lightning:hasPageReference" access="global" >
+	<!-- <c:orderManagement/>
+	<c:checkoutCreator/>
+	<c:detailsOfProduct/>
+	<c:productCard/>
+	<c:productCart/>
+	<c:productHeader/>
+	<c:filter/>
+	<c:search/> -->
+</aura:component>
+

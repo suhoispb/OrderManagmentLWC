@@ -41,6 +41,7 @@
                         class="slds-m-horizontal--small"
                         variant="brand"
                         label="Checkout"
+                        disabled={isProductCartEmpty}
                         onclick={handleCheckoutClick}>
                     </lightning-button>
                     <lightning-button
@@ -53,4 +54,5 @@
          </section>
          <div class="slds-backdrop slds-backdrop_open"></div>
     </div>
+    <c-checkout-creator></c-checkout-creator>
 </template>

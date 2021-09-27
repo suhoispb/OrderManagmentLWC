@@ -18,6 +18,9 @@
     <description>Product Record</description>
     <fieldName>objRecord</fieldName>
   </lightningMessageFields>
+  <lightningMessageFields>
+    <description>New Product ID</description>
+    <fieldName>newProductId</fieldName>
+  </lightningMessageFields>
   <masterLabel>OrderMessageChannel</masterLabel>
 </LightningMessageChannel>
-objRecordInput

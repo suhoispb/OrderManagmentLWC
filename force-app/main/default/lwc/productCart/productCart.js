@@ -3,8 +3,6 @@ import { LightningElement, api, wire, track } from 'lwc';
 import { subscribe, MessageContext } from "lightning/messageService";
 import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
 
-import createOrder from "@salesforce/apex/OrderController.createOrder";
-
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import{ CurrentPageReference } from 'lightning/navigation';
 
@@ -20,26 +18,13 @@ export default class ProductHeader extends LightningElement {
     @wire(MessageContext)
     messageContext;
     
-    
     @api showProductCart;
+    @api accountId;
+    @api accountName;
 
     @track columns = columns; 
     @track productCart = [];
     
-    @api recordId;
-    
-    @wire(CurrentPageReference)
-    pageRef;
-
-    get recordIdFromState(){
-        return this.pageRef.state.c__recordId; 
-    }
-
-    renderedCallback() {
-        if (!this.recordId && this.recordIdFromState) {
-            this.recordId = this.recordIdFromState;
-        }
-    }
 
     closeProductCart() {
         this.dispatchEvent(new CustomEvent("closecart"));
@@ -49,6 +34,9 @@ export default class ProductHeader extends LightningElement {
         return this.productCart.reduce((acc, item) => {
             return acc += item.quantity * item.price;
         }, 0);
+    }
+    get isProductCartEmpty() {
+        return !this.productCart.length;
     }
 
     subscribeToMessageChannel() {
@@ -89,35 +77,19 @@ export default class ProductHeader extends LightningElement {
         }
         return orderItem;
     }
-
+    
     handleCheckoutClick() {
-        let order = {
-            accountId : this.recordId,
-            orderItems : this.productCart
-        }
-        console.log('order:', order)
-
-        let orderJSON = JSON.stringify(order);
-        
-        createOrder({orderJSON: orderJSON})
-            .then(result => {
-                const evt = new ShowToastEvent({
-                    title: "Order created",
-                    message: "Order Id: " + result,
-                    variant: "success"
-                });
-                this.dispatchEvent(evt);
-                
-                this.productCart = [];
-                this.showProductCart = false;
-            })
-            .catch(error => {
-                const evt = new ShowToastEvent({
-                    title: "Error",
-                    message: "Message: " + error.body.message,
-                    variant: "error"
-                });
-                this.dispatchEvent(evt);
-            });
+        console.log('accountId:', this.accountId, 'accountName:', this.accountName)
+        if (this.recordsData.length !== 0)
+        this.template.querySelector('c-checkout-creator').createOrder(this.productCart, this.accountId, this.accountName);
+        else {
+         this.dispatchEvent(
+             new ShowToastEvent({
+                 title: 'Cart is empty, checkout cannot be processed',
+                 variant: 'error',
+                 error: error.body.message
+             })
+         );
+    }
     }
 }

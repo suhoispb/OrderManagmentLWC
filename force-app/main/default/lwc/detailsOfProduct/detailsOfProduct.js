@@ -4,7 +4,6 @@ import getListOfProductsById from "@salesforce/apex/ProductController.getListOfP
 export default class DetailsOfProduct extends LightningElement {
   
   @track product;
-  subscription = null;
 
   @api idProductForDetails;
 

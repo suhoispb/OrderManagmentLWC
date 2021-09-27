@@ -49,6 +49,7 @@ export default class OrderManagement extends LightningElement {
     @wire(getListOfProductsByName, { searchKey: "$key" })
     wiredProductsByName(result) {
       const {data, error} = result;
+      this.wiredProducts = result;
       if (data) {
         this.products = data;
         this.error = undefined;
