@@ -1,6 +1,8 @@
 import {LightningElement, api, wire} from 'lwc';
+
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
+import { NavigationMixin } from 'lightning/navigation';
 
 import ORDER_OBJECT from '@salesforce/schema/Order__c';
 
@@ -20,9 +22,11 @@ import ORDER_ITEM_QUANTITY_OF_PRODUCTS_FIELD from '@salesforce/schema/OrderItem_
 
 export default class CheckoutCreator extends LightningElement {
 
+    accountId;
     recordsData;
     @api
     createOrder(data, accountId, accountName) {
+        this.accountId = accountId;
         this.recordsData = data;
         const fields = {};
         fields[ORDER_NAME_FIELD.fieldApiName] = "Order by " + accountName;
@@ -39,6 +43,7 @@ export default class CheckoutCreator extends LightningElement {
                         variant: 'success',
                     })
                 );
+                
             })
             .catch(error => {
                 console.log(error);
@@ -57,7 +62,7 @@ export default class CheckoutCreator extends LightningElement {
         {
             const fields = {};
             fields[PRODUCT_ID_FIELD.fieldApiName] = this.recordsData[i].id;
-            fields[ORDER_ITEM_NAME_FIELD.fieldApiName] = "OrderItem from OrderId: " + orderId + " placed by: " + accountName;
+            fields[ORDER_ITEM_NAME_FIELD.fieldApiName] = orderId + " placed by: " + accountName;
             fields[ORDER_ID_FIELD.fieldApiName] = orderId;
             fields[PRODUCT_PRICE_FIELD.fieldApiName] = 0;
             fields[ORDER_ITEM_QUANTITY_OF_PRODUCTS_FIELD.fieldApiName] = this.recordsData[i].count;
@@ -65,3 +70,12 @@ export default class CheckoutCreator extends LightningElement {
         }
     }
 }
+
+// this[NavigationMixin.Navigate]({
+//     type: 'standard__recordPage',
+//     attributes: {
+//         recordId: this.accountId,
+//         objectApiName: 'Order',
+//         actionName: 'view'
+//     }
+// });

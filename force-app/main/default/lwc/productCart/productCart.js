@@ -48,7 +48,6 @@ export default class ProductHeader extends LightningElement {
       };
     
     handleMessage({ objRecord }) {
-        console.log('objRecordInSubscr:', objRecord);
         this.addProductToCart(objRecord);
       }
 
@@ -79,17 +78,8 @@ export default class ProductHeader extends LightningElement {
     }
     
     handleCheckoutClick() {
-        console.log('accountId:', this.accountId, 'accountName:', this.accountName)
-        if (this.recordsData.length !== 0)
         this.template.querySelector('c-checkout-creator').createOrder(this.productCart, this.accountId, this.accountName);
-        else {
-         this.dispatchEvent(
-             new ShowToastEvent({
-                 title: 'Cart is empty, checkout cannot be processed',
-                 variant: 'error',
-                 error: error.body.message
-             })
-         );
-    }
+        this.closeProductCart();
+        this.productCart = [];
     }
 }

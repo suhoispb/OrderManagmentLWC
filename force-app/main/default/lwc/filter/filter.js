@@ -33,7 +33,5 @@ export default class Filter extends LightningElement {
           family: filterData.family,
           type: filterData.type
         });
-        console.log('filterData:',filterData )
-        console.log(filterData.type)
     }
 }

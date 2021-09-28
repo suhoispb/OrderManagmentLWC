@@ -6,6 +6,10 @@ import ACCOUNT_OBJECT from '@salesforce/schema/Account';
 import ACCOUNT_NAME_FIELD from '@salesforce/schema/Account.Name';
 import ACCOUNT_NUMBER_FIELD from '@salesforce/schema/Account.AccountNumber';
 
+import ACCOUNT_ID from '@salesforce/schema/Contact.AccountId';
+
+import CONTACT_ID from '@salesforce/schema/User.ContactId';
+
 import PRODUCT_OBJECT from '@salesforce/schema/Product__c';
 import PRODUCT_ID_FIELD from '@salesforce/schema/Product__c.Id';
 import PRODUCT_NAME_FIELD from '@salesforce/schema/Product__c.Name';
@@ -26,23 +30,26 @@ import { createRecord } from "lightning/uiRecordApi";
 import { publish, MessageContext } from "lightning/messageService";
 import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
 
+import getContactsList from "@salesforce/apex/ProductController.getContactsList";
+
+
 
 export default class ProductHeader extends LightningElement {
 
     @track showCreateProductForm = false;
     showProductCart = false;
-    userId = currentUserId;
+
+    userId = currentUserId;getContactsListgetContactsList
+
     isManager = true;
 
-    recId;
-    currentPageReference;
+    accountId='';
+    accountName = '';
+    accountNumber = '';
+    contactId = '0035g00000FEHCZAA5';
 
-    // accountId='';
-    // accountName = '';
-    // accountNumber = '';
 
-    objectApiName = ACCOUNT_OBJECT;
-    accountFields = [ACCOUNT_NAME_FIELD, ACCOUNT_NUMBER_FIELD];
+    contacts = [];
     
     product = {
         objectApiName : PRODUCT_OBJECT,
@@ -67,7 +74,66 @@ export default class ProductHeader extends LightningElement {
         this.showProductCart = false;
     }
 
+
+    @wire(getContactsList)
+    wiredCont({ error, data }) {
+      if (error) {
+        this.contacts = null;
+      }
+      if (data) {
+        this.contacts = data;
+        console.log('this.contacts:', this.contacts)
+      }
+    }
+
+    // @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
+    // wiredContactId({error,data}) {
+    //     if(error) {
+    //         this.dispatchEvent(
+    //             new ShowToastEvent({
+    //                 title: 'Error loading field',
+    //                 message: error.body.message,
+    //                 variant: 'error',
+    //             }),
+    //         )
+    //     } else if (data) {
+    //         this.contactId = data.fields.ContactId.value;
+    //         console.log('data of contactId:', data)
+    //     }
+    // }
+    @wire (getRecord, { recordId: '$contactId', fields: [ ACCOUNT_ID ] })
+    wiredAccountId({error,data}) {
+        if(error) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error loading field',
+                    message: error.body.message,
+                    variant: 'error',
+                }),
+            )
+        } else if (data) {
+            this.accountId = data.fields.AccountId.value;
+            console.log('data of accountId:', this.accountId)
+        }
+    }
+    @wire (getRecord, { recordId: '$accountId', fields: [ ACCOUNT_NAME_FIELD, ACCOUNT_NUMBER_FIELD] })
+    wiredcurrentAcc({error, data}) {
+        if(error) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error loading field',
+                    message: error.body.message,
+                    variant: 'error',
+                }),
+            )
+        } else if (data) {
+            this.accountName = data.fields.Name.value;
+            this.accountNumber = data.fields.AccountNumber.value;
+            console.log('data of accountNameandNumber:', data)
+        }
+    }
     
+
     @wire (getRecord, { recordId: '$userId', fields: [ISMANAGER_FIELD] })
     wiredcurrentUser({error, data}) {
         if(error) {
@@ -90,9 +156,7 @@ export default class ProductHeader extends LightningElement {
     handleCreateProductClick() {
         this.showCreateProductForm = true;
     }
-
-    @wire(MessageContext)
-    messageContext;
+    
     handleSuccess(event) {
         let fields = {
             Name: this.template.querySelector(".nameInput").value,
@@ -122,7 +186,52 @@ export default class ProductHeader extends LightningElement {
                 })
               );
             });
-          console.log('objRecordInput:', objRecordInput)
         this.showCreateProductForm = false;
     }
+
+    // @wire(CurrentPageReference)
+    //     getAccountIdFromUrl(currentPageReference) {
+    //         if(currentPageReference){
+    //             if(currentPageReference.state.c__AccountId){
+    //                 let parameters = currentPageReference.state.c__AccountId.split('/');
+    //                 for(let i = 0; i< parameters.length; i++){
+    //                     if(parameters[i].startsWith("001")){
+    //                         this.accountId = parameters[i];
+    //                         this.errorMessages = [];
+    //                     }
+    //                 }
+    //             }
+    //             if(currentPageReference.state.c__AccountName){
+    //                  let parameters = currentPageReference.state.c__AccountName.split('/');
+    //                  for(let i = 0; i< parameters.length; i++){
+    //                       this.accountName = parameters[i];
+    //                       this.errorMessages = [];
+
+    //                  }
+    //             }
+    //             if(currentPageReference.state.c__AccountNumber){
+    //                  let parameters = currentPageReference.state.c__AccountNumber.split('/');
+    //                  for(let i = 0; i< parameters.length; i++){
+    //                       this.accountNumber = parameters[i];
+    //                       this.errorMessages = [];
+    //                  }
+    //             }
+    //         }
+    //     }
 }
+
+// @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
+//     wiredcurrentAcc({error, data}) {
+//         if(error) {
+//             this.dispatchEvent(
+//                 new ShowToastEvent({
+//                     title: 'Error loading field',
+//                     message: error.body.message,
+//                     variant: 'error',
+//                 }),
+//             )
+//         } else if (data) {
+//             this.contactId = data.fields.ContactId.value;
+//             console.log('data of contactId:', data)
+//         }
+//     }

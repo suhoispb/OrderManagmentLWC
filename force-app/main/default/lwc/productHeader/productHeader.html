@@ -1,7 +1,14 @@
 <template>
-    <!-- <p>Hello, dear {accountName}</p>
-    <p>Your number is {accountNumber}</p> -->
-    <div>{currentPageReference}</div>
+    <div class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+        <lightning-layout>
+            <lightning-layout-item padding="around-small">
+                <div class="custom-box slds-box slds-p-around_medium slds-text-align_center">Account Name:<br>{accountName}</br></div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="custom-box slds-box slds-p-around_medium slds-text-align_center">Account Number:<br>{accountNumber}</br></div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
     <lightning-button if:true={isManager} 
                       label="Create Product"
                       slot="actions"

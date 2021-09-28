@@ -23,4 +23,16 @@ public with sharing class ProductController {
       String productId = id;
       return [ SELECT Id, Name, Description__c, Type__c, Family__c, Image__c, Price__c FROM Product__c WHERE Id = :productId ]; 
     }
+    
+    @AuraEnabled(cacheable=true)
+    public static List<Contact> getContactsList() {
+    List<Contact> conList=new List<Contact>();
+    conList=[ SELECT Id, Name FROM Contact LIMIT 10 ];
+      return conList;
+  }
+    // ID contactId = [Select contactid from User where id =: Userinfo.getUserid()].contactId;
+    // ID AccID  = [Select AccountID from Contact where id =: contactId].AccountId;
 }
+
+// https://brave-panda-cj2d08-dev-ed.lightning.force.com
+//   https://brave-panda-cj2d08-dev-ed.lightning.force.com/lightning/setup/SetupOneHome/home
