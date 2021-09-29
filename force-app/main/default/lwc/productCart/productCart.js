@@ -3,10 +3,6 @@ import { LightningElement, api, wire, track } from 'lwc';
 import { subscribe, MessageContext } from "lightning/messageService";
 import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
 
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import{ CurrentPageReference } from 'lightning/navigation';
-
-
 const columns = [
     { label: 'Name', fieldName: 'name', wrapText: true },
     { label: 'Price', fieldName: 'price', type: 'currency' },
@@ -24,6 +20,8 @@ export default class ProductHeader extends LightningElement {
 
     @track columns = columns; 
     @track productCart = [];
+
+    objRecord='';
     
 
     closeProductCart() {
@@ -47,7 +45,7 @@ export default class ProductHeader extends LightningElement {
         );
       };
     
-    handleMessage({ objRecord }) {
+      handleMessage({ objRecord }) {
         this.addProductToCart(objRecord);
       }
 
@@ -83,3 +81,5 @@ export default class ProductHeader extends LightningElement {
         this.productCart = [];
     }
 }
+
+// https://brave-panda-cj2d08-dev-ed.my.salesforce.com

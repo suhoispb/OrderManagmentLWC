@@ -27,10 +27,7 @@ import currentUserId from '@salesforce/user/Id';
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { createRecord } from "lightning/uiRecordApi";
 
-import { publish, MessageContext } from "lightning/messageService";
-import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
-
-import getContactsList from "@salesforce/apex/ProductController.getContactsList";
+// import getContactsList from "@salesforce/apex/ProductController.getContactsList";
 
 
 
@@ -75,16 +72,16 @@ export default class ProductHeader extends LightningElement {
     }
 
 
-    @wire(getContactsList)
-    wiredCont({ error, data }) {
-      if (error) {
-        this.contacts = null;
-      }
-      if (data) {
-        this.contacts = data;
-        console.log('this.contacts:', this.contacts)
-      }
-    }
+    // @wire(getContactsList)
+    // wiredCont({ error, data }) {
+    //   if (error) {
+    //     this.contacts = null;
+    //   }
+    //   if (data) {
+    //     this.contacts = data;
+    //     console.log('this.contacts:', this.contacts)
+    //   }
+    // }
 
     // @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
     // wiredContactId({error,data}) {
@@ -188,50 +185,4 @@ export default class ProductHeader extends LightningElement {
             });
         this.showCreateProductForm = false;
     }
-
-    // @wire(CurrentPageReference)
-    //     getAccountIdFromUrl(currentPageReference) {
-    //         if(currentPageReference){
-    //             if(currentPageReference.state.c__AccountId){
-    //                 let parameters = currentPageReference.state.c__AccountId.split('/');
-    //                 for(let i = 0; i< parameters.length; i++){
-    //                     if(parameters[i].startsWith("001")){
-    //                         this.accountId = parameters[i];
-    //                         this.errorMessages = [];
-    //                     }
-    //                 }
-    //             }
-    //             if(currentPageReference.state.c__AccountName){
-    //                  let parameters = currentPageReference.state.c__AccountName.split('/');
-    //                  for(let i = 0; i< parameters.length; i++){
-    //                       this.accountName = parameters[i];
-    //                       this.errorMessages = [];
-
-    //                  }
-    //             }
-    //             if(currentPageReference.state.c__AccountNumber){
-    //                  let parameters = currentPageReference.state.c__AccountNumber.split('/');
-    //                  for(let i = 0; i< parameters.length; i++){
-    //                       this.accountNumber = parameters[i];
-    //                       this.errorMessages = [];
-    //                  }
-    //             }
-    //         }
-    //     }
 }
-
-// @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
-//     wiredcurrentAcc({error, data}) {
-//         if(error) {
-//             this.dispatchEvent(
-//                 new ShowToastEvent({
-//                     title: 'Error loading field',
-//                     message: error.body.message,
-//                     variant: 'error',
-//                 }),
-//             )
-//         } else if (data) {
-//             this.contactId = data.fields.ContactId.value;
-//             console.log('data of contactId:', data)
-//         }
-//     }

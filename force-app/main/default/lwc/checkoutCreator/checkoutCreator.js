@@ -36,6 +36,8 @@ export default class CheckoutCreator extends LightningElement {
         createRecord({ apiName: ORDER_OBJECT.objectApiName, fields })
             .then((order) => {
                 this.addOrderItems(order.id, accountName);
+                console.log('order Id:', order.id);
+                console.log('order:', order);
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Order created',
@@ -43,13 +45,21 @@ export default class CheckoutCreator extends LightningElement {
                         variant: 'success',
                     })
                 );
-                
+                    this[NavigationMixin.Navigate]({
+                        type: 'standard__recordPage',
+                        attributes: {
+                            recordId: order.id,
+                            objectApiName: 'Order',
+                            actionName: 'new'
+                        }
+                    });
             })
             .catch(error => {
                 console.log(error);
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Order cannot be created due to error',
+                        message: error.body.message,
                         variant: 'error',
                     }),
                 );
@@ -58,6 +68,7 @@ export default class CheckoutCreator extends LightningElement {
     }
 
     addOrderItems(orderId, accountName) {
+        console.log('orderId на items:', orderId)
         for (let i in this.recordsData)
         {
             const fields = {};
@@ -69,13 +80,8 @@ export default class CheckoutCreator extends LightningElement {
             createRecord({ apiName: ORDER_ITEM_OBJECT.objectApiName, fields })
         }
     }
-}
 
-// this[NavigationMixin.Navigate]({
-//     type: 'standard__recordPage',
-//     attributes: {
-//         recordId: this.accountId,
-//         objectApiName: 'Order',
-//         actionName: 'view'
-//     }
-// });
+    
+ }
+
+
