@@ -52,6 +52,7 @@ export default class ProductHeader extends LightningElement {
     connectedCallback() {
         this.subscribeToMessageChannel();
       }
+      
 
     addProductToCart(objRecord) {        
         let elemIndex = this.productCart.findIndex(elem => {

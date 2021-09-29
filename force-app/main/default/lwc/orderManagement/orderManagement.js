@@ -1,8 +1,6 @@
 import { LightningElement, wire, track } from 'lwc';
 
-import getListOfProductsByName from "@salesforce/apex/ProductController.getListOfProductsByName";
-import getListOfProductsByType from "@salesforce/apex/ProductController.getListOfProductsByType";
-import getListOfProductsByFamily from "@salesforce/apex/ProductController.getListOfProductsByFamily";
+import searchProducts from "@salesforce/apex/ProductController.searchProducts";
 
 import { subscribe, MessageContext } from "lightning/messageService";
 import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
@@ -15,9 +13,9 @@ export default class OrderManagement extends LightningElement {
 
     isLoading = true;
 
-    key='';
-    family = '';
-    type = '';
+    searchTerm='';
+    filterFamily = '';
+    filterType = '';
 
     subscription = null;
 
@@ -25,7 +23,7 @@ export default class OrderManagement extends LightningElement {
     messageContext;
 
     updateKey(event) {
-      this.key = event.detail;
+      this.searchTerm = event.detail;
     }
     
     subscribeToMessageChannel() {
@@ -37,19 +35,18 @@ export default class OrderManagement extends LightningElement {
     };
   
     handleMessage({ family, type }) {
-      this.family = family;
-      this.type = type;
+      this.filterFamily = family;
+      this.filterType = type;
     }
     
     connectedCallback() {
       this.subscribeToMessageChannel();
     }
 
-    @wire(getListOfProductsByName, { searchKey: "$key" })
-    wiredProductsByName(result) {
-      const {data, error} = result;
-      this.wiredProducts = result;
-      if (data) {
+    @wire(searchProducts, {searchTerm: '$searchTerm', filterType: '$filterType', filterFamily: '$filterFamily'})
+	  wiredProducts({error, data}) {
+      if(data) {
+        console.log('dataFilter:', data)
         this.products = data;
         this.error = undefined;
         this.isLoading = false;
@@ -59,29 +56,4 @@ export default class OrderManagement extends LightningElement {
         this.isLoading = false;
       }
     }
-    @wire(getListOfProductsByFamily, { family: "$family" })
-    wiredProductsByFamily({ error, data }) {
-      if (data) {
-        this.products = data;
-        this.error = undefined;
-        this.isLoading = false;
-      } else if (error) {
-        this.error = error;
-        this.products = undefined;
-        this.isLoading = false;
-      }
-    }
-    @wire(getListOfProductsByType, { type: "$type" })
-    wiredProductsByType({ error, data }) {
-      if (data) {
-        this.products = data;
-        this.error = undefined;
-        this.isLoading = false;
-      } else if (error) {
-        this.error = error;
-        this.products = undefined;
-        this.isLoading = false;
-      }
-    }
-  
 }

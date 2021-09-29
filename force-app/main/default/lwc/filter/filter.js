@@ -22,11 +22,11 @@ export default class Filter extends LightningElement {
     }
 
         setFilter(event) {
-        let familyFiled = this.template.querySelector("lightning-input-field[data-my-id=family]");
+        let familyFiled = this.template.querySelector(".family").value;
         let typeFiled = this.template.querySelector("lightning-input-field[data-my-id=type]");
 
         let filterData = {
-            family: familyFiled.value,
+            family: familyFiled,
             type: typeFiled.value
         }
         publish(this.messageContext, OrderMessageChannel, {
