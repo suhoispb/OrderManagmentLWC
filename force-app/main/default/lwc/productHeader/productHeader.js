@@ -21,14 +21,11 @@ import PRODUCT_DESCRIPTION_FIELD from '@salesforce/schema/Product__c.Description
 
 import ISMANAGER_FIELD from '@salesforce/schema/User.isManager__c';
 
-import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
 import currentUserId from '@salesforce/user/Id';
 
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { createRecord } from "lightning/uiRecordApi";
-
-// import getContactsList from "@salesforce/apex/ProductController.getContactsList";
-
 
 
 export default class ProductHeader extends LightningElement {
@@ -36,7 +33,7 @@ export default class ProductHeader extends LightningElement {
     @track showCreateProductForm = false;
     showProductCart = false;
 
-    userId = currentUserId;getContactsListgetContactsList
+    userId = currentUserId;
 
     isManager = true;
 
@@ -44,6 +41,8 @@ export default class ProductHeader extends LightningElement {
     accountName = '';
     accountNumber = '';
     contactId = '0035g00000FEHCZAA5';
+
+    // contactId = '0035g00000FEHCZAA5'; - hard code contactId for checking functions
 
 
     contacts = [];
@@ -72,17 +71,6 @@ export default class ProductHeader extends LightningElement {
     }
 
 
-    // @wire(getContactsList)
-    // wiredCont({ error, data }) {
-    //   if (error) {
-    //     this.contacts = null;
-    //   }
-    //   if (data) {
-    //     this.contacts = data;
-    //     console.log('this.contacts:', this.contacts)
-    //   }
-    // }
-
     // @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
     // wiredContactId({error,data}) {
     //     if(error) {
@@ -110,7 +98,6 @@ export default class ProductHeader extends LightningElement {
             )
         } else if (data) {
             this.accountId = data.fields.AccountId.value;
-            console.log('data of accountId:', this.accountId)
         }
     }
     @wire (getRecord, { recordId: '$accountId', fields: [ ACCOUNT_NAME_FIELD, ACCOUNT_NUMBER_FIELD] })
@@ -126,7 +113,6 @@ export default class ProductHeader extends LightningElement {
         } else if (data) {
             this.accountName = data.fields.Name.value;
             this.accountNumber = data.fields.AccountNumber.value;
-            console.log('data of accountNameandNumber:', data)
         }
     }
     

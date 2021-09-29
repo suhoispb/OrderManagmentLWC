@@ -23,7 +23,6 @@ export default class ProductCard extends LightningElement {
 
     setDetails() {
         this.idProductForDetails =  this.product.Id;
-        console.log('adiProduct:', this.idProductForDetails)
   }
 
   addProductToCart() {

@@ -12,18 +12,18 @@ import TOTAL_PRICE_FIELD from '@salesforce/schema/Order__c.TotalPrice__c';
 import TOTAL_PRODUCT_COUNT_FIELD from '@salesforce/schema/Order__c.TotalProductCount__c';
 
 import ORDER_ITEM_OBJECT from '@salesforce/schema/OrderItem__c';
-
 import PRODUCT_ID_FIELD from '@salesforce/schema/OrderItem__c.ProductId__c';
-import ORDER_ID_FIELD from '@salesforce/schema/OrderItem__c.OrderId__c';
 import PRODUCT_PRICE_FIELD from '@salesforce/schema/OrderItem__c.Price__c';
-import ORDER_ITEM_NAME_FIELD from '@salesforce/schema/OrderItem__c.Name';
-import ORDER_ITEM_QUANTITY_OF_PRODUCTS_FIELD from '@salesforce/schema/OrderItem__c.Quantity__c';
+import ITEM_NAME_FIELD from '@salesforce/schema/OrderItem__c.Name';
+import PRODUCT_QUANTITY_FIELD from '@salesforce/schema/OrderItem__c.Quantity__c';
+import ORDER_ID_FIELD from '@salesforce/schema/OrderItem__c.OrderId__c';
 
 
-export default class CheckoutCreator extends LightningElement {
+export default class CheckoutCreator extends NavigationMixin(LightningElement) {
 
     accountId;
     recordsData;
+    
     @api
     createOrder(data, accountId, accountName) {
         this.accountId = accountId;
@@ -36,8 +36,6 @@ export default class CheckoutCreator extends LightningElement {
         createRecord({ apiName: ORDER_OBJECT.objectApiName, fields })
             .then((order) => {
                 this.addOrderItems(order.id, accountName);
-                console.log('order Id:', order.id);
-                console.log('order:', order);
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Order created',
@@ -45,14 +43,14 @@ export default class CheckoutCreator extends LightningElement {
                         variant: 'success',
                     })
                 );
-                    this[NavigationMixin.Navigate]({
-                        type: 'standard__recordPage',
-                        attributes: {
-                            recordId: order.id,
-                            objectApiName: 'Order',
-                            actionName: 'new'
-                        }
-                    });
+               this[NavigationMixin.Navigate]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: order.id,
+                        objectApiName: 'Order',
+                        actionName: 'view'
+            }
+        });
             })
             .catch(error => {
                 console.log(error);
@@ -67,21 +65,25 @@ export default class CheckoutCreator extends LightningElement {
 
     }
 
+
     addOrderItems(orderId, accountName) {
-        console.log('orderId на items:', orderId)
         for (let i in this.recordsData)
         {
             const fields = {};
-            fields[PRODUCT_ID_FIELD.fieldApiName] = this.recordsData[i].id;
-            fields[ORDER_ITEM_NAME_FIELD.fieldApiName] = orderId + " placed by: " + accountName;
+            fields[PRODUCT_ID_FIELD.fieldApiName] = this.recordsData[i].productId;
+            console.log('this.recordsData[i].id:', this.recordsData)
+            fields[ITEM_NAME_FIELD.fieldApiName] = accountName + orderId;
             fields[ORDER_ID_FIELD.fieldApiName] = orderId;
-            fields[PRODUCT_PRICE_FIELD.fieldApiName] = 0;
-            fields[ORDER_ITEM_QUANTITY_OF_PRODUCTS_FIELD.fieldApiName] = this.recordsData[i].count;
-            createRecord({ apiName: ORDER_ITEM_OBJECT.objectApiName, fields })
+            fields[PRODUCT_PRICE_FIELD.fieldApiName] = 1;
+            fields[PRODUCT_QUANTITY_FIELD.fieldApiName] = this.recordsData[i].quantity;;
+            const recordInput = { apiName: ORDER_ITEM_OBJECT.objectApiName, fields };
+            createRecord(recordInput)
+        
         }
     }
 
+}
     
- }
+ 
 
 

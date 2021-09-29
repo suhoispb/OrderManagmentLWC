@@ -81,5 +81,3 @@ export default class ProductHeader extends LightningElement {
         this.productCart = [];
     }
 }
-
-// https://brave-panda-cj2d08-dev-ed.my.salesforce.com

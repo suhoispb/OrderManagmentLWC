@@ -39,7 +39,6 @@ export default class OrderManagement extends LightningElement {
     handleMessage({ family, type }) {
       this.family = family;
       this.type = type;
-      console.log('productFamily:', this.family)
     }
     
     connectedCallback() {
