@@ -1,7 +1,7 @@
 import { LightningElement, api, wire, track } from 'lwc';
 
 import { subscribe, MessageContext } from "lightning/messageService";
-import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
+import AddProduct from "@salesforce/messageChannel/AddProduct__c";
 
 const columns = [
     { label: 'Name', fieldName: 'name', wrapText: true },
@@ -12,7 +12,7 @@ const columns = [
 export default class ProductHeader extends LightningElement {    
     
     @wire(MessageContext)
-    messageContext;
+    messageContextt;
     
     @api showProductCart;
     @api accountId;
@@ -22,6 +22,8 @@ export default class ProductHeader extends LightningElement {
     @track productCart = [];
 
     objRecord='';
+
+    subscription = null;
     
 
     closeProductCart() {
@@ -39,8 +41,8 @@ export default class ProductHeader extends LightningElement {
 
     subscribeToMessageChannel() {
         this.subscription = subscribe(
-          this.messageContext,
-          OrderMessageChannel,
+          this.messageContextt,
+          AddProduct,
           (message) => this.handleMessage(message)
         );
       };
@@ -52,7 +54,7 @@ export default class ProductHeader extends LightningElement {
     connectedCallback() {
         this.subscribeToMessageChannel();
       }
-      
+
 
     addProductToCart(objRecord) {        
         let elemIndex = this.productCart.findIndex(elem => {
@@ -77,8 +79,14 @@ export default class ProductHeader extends LightningElement {
     }
     
     handleCheckoutClick() {
-        this.template.querySelector('c-checkout-creator').createOrder(this.productCart, this.accountId, this.accountName);
-        this.closeProductCart();
-        this.productCart = [];
+        if (this.accountId == '') {
+            console.log('this.accountId:', this.accountId)
+            this.closeProductCart();
+            this.productCart = [];
+        } else if (this.accountId != '') {
+            this.template.querySelector('c-checkout-creator').createOrder(this.productCart, this.accountId, this.accountName);
+            this.closeProductCart();
+            this.productCart = [];
+        }
     }
 }

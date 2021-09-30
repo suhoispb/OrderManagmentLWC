@@ -2,7 +2,7 @@ public with sharing class ProductController {
 
   @AuraEnabled(Cacheable=true)
 	public static Product__c[] getAllProducts() {
-		return [SELECT Id, Name, Description__c, Family__c, Type__c
+		return [SELECT Id, Name, Description__c, Family__c, Type__c, Price__c
 		FROM Product__c ORDER BY Name LIMIT 50];
 	}
 
@@ -16,7 +16,7 @@ public with sharing class ProductController {
 		if (filterType == '' && filterFamily != '')
 		{
 			filterFamily = '%'+ filterFamily +'%';
-			return [SELECT Id, Name, Description__c, Family__c, Type__c
+			return [SELECT Id, Name, Description__c, Family__c, Type__c, Price__c
 			FROM Product__c
 			WHERE Name LIKE :searchTerm
 			AND Family__c LIKE :filterFamily
@@ -25,7 +25,7 @@ public with sharing class ProductController {
 		else if (filterType != '' && filterFamily == '')
 		{
 			filterType = '%'+ filterType +'%';
-			return [SELECT Id, Name, Description__c, Family__c, Type__c
+			return [SELECT Id, Name, Description__c, Family__c, Type__c, Price__c
 			FROM Product__c
 			WHERE Name LIKE :searchTerm
 			AND Type__c LIKE :filterType
@@ -35,7 +35,7 @@ public with sharing class ProductController {
 		{
 			filterType = '%'+ filterType +'%';
 			filterFamily = '%'+ filterFamily +'%';
-			return [SELECT Id, Name, Description__c, Family__c, Type__c
+			return [SELECT Id, Name, Description__c, Family__c, Type__c, Price__c
 			FROM Product__c WHERE Name LIKE :searchTerm
 			AND Type__c LIKE :filterType
 			AND Family__c LIKE :filterFamily
@@ -44,7 +44,7 @@ public with sharing class ProductController {
 		else
 		{
 			// Execute search query without filters
-			return [SELECT Id, Name, Description__c, Family__c, Type__c
+			return [SELECT Id, Name, Description__c, Family__c, Type__c, Price__c
 			FROM Product__c
 			WHERE Name LIKE :searchTerm
 			ORDER BY Name LIMIT 50];

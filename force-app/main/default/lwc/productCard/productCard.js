@@ -1,12 +1,12 @@
 import { LightningElement, api, wire } from 'lwc';
 
 import { publish, MessageContext } from "lightning/messageService";
-import OrderMessageChannel from "@salesforce/messageChannel/OrderMessageChannel__c";
+import AddProduct from "@salesforce/messageChannel/AddProduct__c";
 
 export default class ProductCard extends LightningElement {
 
     @wire(MessageContext)
-    messageContext;
+    messageContextt;
     
     idProductForDetails = '';
 
@@ -31,7 +31,7 @@ export default class ProductCard extends LightningElement {
         Id: this.product.Id,
         Price__c: this.product.Price__c
       };
-      publish(this.messageContext, OrderMessageChannel, {
+      publish(this.messageContextt, AddProduct, {
         objRecord: productObj
       });
   }

@@ -1,7 +1,5 @@
 import { LightningElement, api, wire, track } from 'lwc';
 
-import { CurrentPageReference } from 'lightning/navigation';
-
 import ACCOUNT_OBJECT from '@salesforce/schema/Account';
 import ACCOUNT_NAME_FIELD from '@salesforce/schema/Account.Name';
 import ACCOUNT_NUMBER_FIELD from '@salesforce/schema/Account.AccountNumber';
@@ -40,7 +38,7 @@ export default class ProductHeader extends LightningElement {
     accountId='';
     accountName = '';
     accountNumber = '';
-    contactId = '0035g00000FEHCZAA5';
+    contactId = '';
 
     // contactId = '0035g00000FEHCZAA5'; - hard code contactId for checking functions
 
@@ -71,21 +69,21 @@ export default class ProductHeader extends LightningElement {
     }
 
 
-    // @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
-    // wiredContactId({error,data}) {
-    //     if(error) {
-    //         this.dispatchEvent(
-    //             new ShowToastEvent({
-    //                 title: 'Error loading field',
-    //                 message: error.body.message,
-    //                 variant: 'error',
-    //             }),
-    //         )
-    //     } else if (data) {
-    //         this.contactId = data.fields.ContactId.value;
-    //         console.log('data of contactId:', data)
-    //     }
-    // }
+    @wire (getRecord, { recordId: '$userId', fields: [ CONTACT_ID ] })
+    wiredContactId({error,data}) {
+        if(error) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error loading field',
+                    message: error.body.message,
+                    variant: 'error',
+                }),
+            )
+        } else if (data) {
+            this.contactId = data.fields.ContactId.value;
+            console.log('data of contactId:', data)
+        }
+    }
     @wire (getRecord, { recordId: '$contactId', fields: [ ACCOUNT_ID ] })
     wiredAccountId({error,data}) {
         if(error) {

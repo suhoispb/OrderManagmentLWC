@@ -46,7 +46,6 @@ export default class OrderManagement extends LightningElement {
     @wire(searchProducts, {searchTerm: '$searchTerm', filterType: '$filterType', filterFamily: '$filterFamily'})
 	  wiredProducts({error, data}) {
       if(data) {
-        console.log('dataFilter:', data)
         this.products = data;
         this.error = undefined;
         this.isLoading = false;

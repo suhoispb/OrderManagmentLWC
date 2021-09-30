@@ -14,7 +14,6 @@ export default class DetailsOfProduct extends LightningElement {
     }
     if (data) {
       this.product = data;
-      console.log(this.product)
     }
   }
 

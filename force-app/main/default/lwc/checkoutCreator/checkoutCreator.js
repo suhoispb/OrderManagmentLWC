@@ -21,12 +21,10 @@ import ORDER_ID_FIELD from '@salesforce/schema/OrderItem__c.OrderId__c';
 
 export default class CheckoutCreator extends NavigationMixin(LightningElement) {
 
-    accountId;
     recordsData;
     
     @api
     createOrder(data, accountId, accountName) {
-        this.accountId = accountId;
         this.recordsData = data;
         const fields = {};
         fields[ORDER_NAME_FIELD.fieldApiName] = "Order by " + accountName;
@@ -53,7 +51,6 @@ export default class CheckoutCreator extends NavigationMixin(LightningElement) {
         });
             })
             .catch(error => {
-                console.log(error);
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Order cannot be created due to error',
@@ -71,7 +68,6 @@ export default class CheckoutCreator extends NavigationMixin(LightningElement) {
         {
             const fields = {};
             fields[PRODUCT_ID_FIELD.fieldApiName] = this.recordsData[i].productId;
-            console.log('this.recordsData[i].id:', this.recordsData)
             fields[ITEM_NAME_FIELD.fieldApiName] = accountName + orderId;
             fields[ORDER_ID_FIELD.fieldApiName] = orderId;
             fields[PRODUCT_PRICE_FIELD.fieldApiName] = 1;
